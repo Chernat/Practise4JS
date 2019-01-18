@@ -4,6 +4,6 @@ var meal = function(food) {
   } else {
     console.log('Some food please :)');
   }
-};
+}
 
 meal('cookies');

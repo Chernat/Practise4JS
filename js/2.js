@@ -1,19 +1,26 @@
-console.log(comparePassword());
+var password = comparePassword('123');
 
-function comparePassword() {
-  var pass = prompt('Введите пароль','');
-  var validPass = '123';
+function comparePassword(pass) {
+  var counter = 1;
 
-  for (var i = 1; i < 5; i++) {
-    if (pass !== validPass) {
-      console.log('Неверный пароль. Осталось ' + (5 - i) + ' попытки');
-      pass = prompt('Введите пароль еще раз','');
-      if (i === 4) {
-        console.log('Вы исчерпали все попытки')
+  return function (enterUserPass) {
+    if (counter > 5) {
+      return console.log('Вы исчперпали число попыток');
+    } else {
+      if (enterUserPass === pass) {
+        counter = 1;
+        return true;
+      } else {
+        counter++;
         return false;
       }
-    } else {
-      return true;
     }
   }
 }
+
+console.log(password('1234'));
+console.log(password('1234'));
+console.log(password('1234'));
+console.log(password('1234'));
+console.log(password('123'));
+console.log(password('1234'));

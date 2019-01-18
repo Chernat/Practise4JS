@@ -2,142 +2,100 @@ var form = {
 	name: {
 		value: 'Masha',
 		validationRules: {
-			minLength: 3,
+			minLength: 2,
 			maxLength: 20,
-			required: true,
+			required: false,
 		},
 		errorMessage: '',
 	},
 	email: {
-		value: 'email@example.com',
+		value: 'sdf@fgfdg',
 		validationRules: {
 			email: true,
 			required: true,
 		},
 		errorMessage: '',
-	},
-  validMinLength: function() {
-    if (this.name.value.length < this.name.validationRules.minLength) {
-      this.name.errorMessage = 'Min length ' + this.name.validationRules.minLength;
-      return false;
-    } else {
-      return true;
-    }
-  },
-  validMaxLength: function() {
-    if (this.name.value.length > this.name.validationRules.maxLength) {
-      this.name.errorMessage = 'Max length ' + this.name.validationRules.maxLength;
-      return false;
-    } else {
-      return true;
-    }
-  },
-  requiredName: function() {
-    if (this.name.validationRules.required && this.name.value.length === 0) {
-      this.name.errorMessage = 'Enter your Name';
-      return false;
-    } else {
-      return true;
-    }
-  },
-  requiredEmail: function() {
-    if (this.email.validationRules.required && this.email.value.length === 0) {
-      this.email.errorMessage = 'Enter your Name';
-      return false;
-    } else {
-      return true;
-    }
-  },
-  validEmail: function() {
-    for (var i = 0; i < this.email.value.length; i++) {
-      if (this.email.value.charAt(i) === '@') {
-        return true;
-      }
-    }
-
-    this.email.errorMessage = 'Enter valid email'
-    return false;
-  }
+	}
 };
 
-console.log(minLengthValid(form));
-console.log(maxLengthValid(form));
-console.log(isRequiredName(form));
-console.log(isRequiredEmail(form));
-console.log(isEmail(form));
 console.log(validation(form));
 
-console.log(form.validMaxLength());
-console.log(form.validMinLength());
-console.log(form.requiredName());
-console.log(form.requiredEmail());
-console.log(form.validEmail());
+var validation = {
+
+}
 
 function validation(obj) {
-  if (isRequiredName(obj)) {
-    if (minLengthValid(obj) && maxLengthValid(obj)) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
+	for (var key in obj) {
+		if (isRequired(obj[key])) {
+			if (isEmpty(obj[key])) {
+				return false;
+			}
+		}
 
-  if (isRequiredEmail(obj)) {
-    if (isEmail(obj)) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
+		if (!minLengthValid(obj[key])){
+			return false;
+		}
+
+		if (!maxLengthValid(obj[key])){
+			return false;
+		}
+
+		if (!isEmail(obj[key])) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 function minLengthValid(obj) {
-  if (obj.name.value.length < obj.name.validationRules.minLength) {
-    obj.name.errorMessage = 'Min length ' + obj.name.validationRules.minLength;
-    return false;
-  } else {
-    return true;
-  }
+	if (obj.validationRules.minLength) {
+		if (obj.value.length < obj.validationRules.minLength) {
+	    obj.errorMessage = 'Min length ' + obj.validationRules.minLength;
+	    return false;
+	  }
+	}
+  return true;
 };
 
 function maxLengthValid(obj) {
-  if (obj.name.value.length > obj.name.validationRules.maxLength) {
-    obj.name.errorMessage = 'Max length ' + obj.name.validationRules.maxLength;
-    return false;
-  } else {
-    return true;
-  }
+	if (obj.validationRules.maxLength) {
+		if (obj.value.length > obj.validationRules.maxLength) {
+	    obj.errorMessage = 'Max length ' + obj.validationRules.maxLength;
+	    return false;
+	  }
+	}
+
+  return true;
 };
 
-function isRequiredName(obj) {
-  if (obj.name.validationRules.required && obj.name.value.length === 0) {
-    obj.name.errorMessage = 'Enter your Name';
-    return false;
-  } else {
+function isRequired(obj) {
+  if (obj.validationRules.required) {
     return true;
   }
-}
 
-function isRequiredEmail(obj) {
-  if (obj.email.validationRules.required && obj.email.value.length === 0) {
-    obj.email.errorMessage = 'Enter your Email';
-    return false;
-  } else {
-    return true;
-  }
+	obj.errorMessage = 'Its required field';
+	return false;
 }
 
 function isEmail(obj) {
-  for (var i = 0; i < obj.email.value.length; i++) {
-    if (obj.email.value.charAt(i) === '@') {
-      return true;
-    }
-  }
+	if (obj.validationRules.email) {
+		for (var i = 0; i < obj.value.length; i++) {
+	    if (obj.value.charAt(i) === '@') {
+	      return true;
+	    }
+	  }
 
-  obj.email.errorMessage = 'Enter valid email'
-  return false;
+	  obj.errorMessage = 'Enter valid email';
+	  return false;
+	}
+  return true;
+}
+
+function isEmpty(obj) {
+	if (obj.value.length === 0) {
+		return true;
+	}
+
+	return false;
 }
