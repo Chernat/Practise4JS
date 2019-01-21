@@ -18,11 +18,84 @@ var form = {
 	}
 };
 
-console.log(validation(form));
+var validationObj = {
 
-var validation = {
+	validationAll: function(obj) {
+		for (var key in obj) {
+			if (this.validRequired(obj[key])) {
+				if (this.validEmpty(obj[key])) {
+					return false;
+				}
+			}
 
-}
+			if (!(this.validMinLength(obj[key]))) {
+				return false;
+			}
+
+			if (!(this.validMaxLength(obj[key]))) {
+				return false;
+			}
+
+			if (!(this.validEmail(obj[key]))) {
+				return false;
+			}
+		}
+
+		return true;
+	},
+
+	validMinLength: function(obj) {
+		if (obj.validationRules.minLength) {
+			if (obj.value.length < obj.validationRules.minLength) {
+		    obj.errorMessage = 'Min length ' + obj.validationRules.minLength;
+		    return false;
+		  }
+		}
+	  return true;
+	},
+
+	validMaxLength: function (obj) {
+		if (obj.validationRules.maxLength) {
+			if (obj.value.length > obj.validationRules.maxLength) {
+		    obj.errorMessage = 'Max length ' + obj.validationRules.maxLength;
+		    return false;
+		  }
+		}
+
+	  return true;
+	},
+
+	validRequired: function (obj) {
+	  if (obj.validationRules.required) {
+	    return true;
+	  }
+
+		obj.errorMessage = 'Required field';
+		return false;
+	},
+
+	validEmail: function (obj) {
+		if (obj.validationRules.email) {
+			for (var i = 0; i < obj.value.length; i++) {
+		    if (obj.value.charAt(i) === '@') {
+		      return true;
+		    }
+		  }
+
+		  obj.errorMessage = 'Enter valid email';
+		  return false;
+		}
+	  return true;
+	},
+
+	validEmpty: function (obj) {
+		if (obj.value.length === 0) {
+			return true;
+		}
+
+		return false;
+	}
+};
 
 function validation(obj) {
 	for (var key in obj) {
@@ -56,7 +129,7 @@ function minLengthValid(obj) {
 	  }
 	}
   return true;
-};
+}
 
 function maxLengthValid(obj) {
 	if (obj.validationRules.maxLength) {
@@ -67,14 +140,14 @@ function maxLengthValid(obj) {
 	}
 
   return true;
-};
+}
 
 function isRequired(obj) {
   if (obj.validationRules.required) {
     return true;
   }
 
-	obj.errorMessage = 'Its required field';
+	obj.errorMessage = 'Required field';
 	return false;
 }
 
@@ -99,3 +172,7 @@ function isEmpty(obj) {
 
 	return false;
 }
+
+
+console.log(validation(form));
+console.log(validationObj.validationAll(form));
