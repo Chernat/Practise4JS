@@ -89,11 +89,7 @@ var validationObj = {
 	},
 
 	validEmpty: function (obj) {
-		if (obj.value.length === 0) {
-			return true;
-		}
-
-		return false;
+		return obj.value.length === 0;
 	}
 };
 
@@ -166,13 +162,9 @@ function isEmail(obj) {
 }
 
 function isEmpty(obj) {
-	if (obj.value.length === 0) {
-		return true;
-	}
+	return obj.value.length === 0;
 
-	return false;
 }
-
 
 console.log(validation(form));
 console.log(validationObj.validationAll(form));
